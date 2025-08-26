@@ -1,0 +1,8 @@
+# 可能用到的数据处理句子，红色字体，为使用前需要更换的变量
+# 天转换为年
+Data$OS_years <- Data$Day5y.1825. / 365 
+
+# 把原来的 1（生存）→ 0（未发生死亡）把原来的 0（死亡）→ 1（发生死亡）如果原变量是 NA，保留为 NA
+Data$death_event <- ifelse(Data$a1_or_d0 == 1, 0, 
+                           ifelse(Data$a1_or_d0 == 0, 1, NA))      
+table(Data$a1.or.d0, useNA = "always")  #检验转换结果
