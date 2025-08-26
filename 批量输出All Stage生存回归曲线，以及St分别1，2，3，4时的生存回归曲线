@@ -1,0 +1,46 @@
+# 以下为批量输出All Stage生存回归曲线，以及St分别1，2，3，4时的生存回归曲线
+# ✅ 设置目标变量与图例名称（你只需修改这里！）
+var_name      <- "Both_GCCHigh4_FibrHigh0"
+legend_labels <- c("Either Negative", "Both Positive")
+
+# ✅ 设置时间与状态变量（一般不变）
+time_var   <- "OS_years"
+status_var <- "death_event"
+
+# ✅ 设置输出路径前缀（不含文件名）
+output_dir <- "/Users/rorypan/Desktop/R分析/作图/"
+
+# ✅ 定义阶段标签与筛选条件
+stage_list <- list(
+  "all_st" = Data,                            # 总体
+  "st1"    = subset(Data, st == 1),
+  "st2"    = subset(Data, st == 2),
+  "st3"    = subset(Data, st == 3),
+  "st4"    = subset(Data, st == 4)
+)
+
+# ✅ 定义图标题
+title_list <- list(
+  "all_st" = "Overall Survival",
+  "st1"    = "Stage I",
+  "st2"    = "Stage II",
+  "st3"    = "Stage III",
+  "st4"    = "Stage IV"
+)
+
+# ✅ 批量绘图与导出
+for (key in names(stage_list)) {
+  stage_data  <- stage_list[[key]]
+  stage_title <- title_list[[key]]
+  pptx_file   <- file.path(output_dir, paste0("KM_", var_name, "_", key, ".pptx"))
+
+  plot_km_stage(
+    data_subset   = stage_data,
+    stage_title   = stage_title,
+    pptx_path     = pptx_file,
+    var_name      = var_name,
+    time_var      = time_var,
+    status_var    = status_var,
+    legend_labels = legend_labels
+  )
+}
